@@ -5,11 +5,10 @@ import {
   // protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { queues } from "~/server/db/schema";
 
 export const queueRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.select().from(queues);
+  getAll: publicProcedure.query(({}) => {
+    return;
   }),
   // hello: publicProcedure
   //   .input(z.object({ text: z.string() }))
