@@ -39,33 +39,6 @@ export const posts = mysqlTable(
   }),
 );
 
-export const queues = mysqlTable("queue", {
-  id: varchar("id", { length: 128 })
-    .$defaultFn(() => createId())
-    .primaryKey(),
-  updatedAt: timestamp("updatedAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull()
-    .onUpdateNow(),
-  userId: varchar("userId", { length: 255 }).notNull(),
-});
-
-export const queuesRelations = relations(queues, ({ one }) => ({
-  user: one(users, { fields: [queues.userId], references: [users.id] }),
-}));
-
-export const vaults = mysqlTable("vault", {
-  id: varchar("id", { length: 128 })
-    .$defaultFn(() => createId())
-    .primaryKey(),
-  money: int("money"),
-  userId: varchar("userId", { length: 255 }).notNull(),
-});
-
-export const vaultsRelations = relations(vaults, ({ one }) => ({
-  user: one(users, { fields: [vaults.userId], references: [users.id] }),
-}));
-
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
@@ -76,15 +49,13 @@ export const users = mysqlTable("user", {
   }).default(sql`CURRENT_TIMESTAMP(3)`),
   image: varchar("image", { length: 255 }),
   admin: boolean("admin").default(false),
-  queueId: varchar("queueId", { length: 128 }),
-  vaultId: varchar("vaultId", { length: 128 }),
+  queuedAt: timestamp("queuedAt"),
+  money: int("money").default(100),
 });
 
-export const usersRelations = relations(users, ({ many, one }) => ({
+export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
-  vaults: one(vaults, { fields: [users.vaultId], references: [vaults.id] }),
-  queues: one(queues, { fields: [users.queueId], references: [queues.id] }),
 }));
 
 export const accounts = mysqlTable(
