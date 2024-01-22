@@ -1,5 +1,6 @@
 import { queueRouter } from "~/server/api/routers/queue";
 import { createTRPCRouter } from "~/server/api/trpc";
+import { pusherRouter } from "./routers/pusher";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   queue: queueRouter,
+  pusher: pusherRouter,
 });
 
 // export type definition of API
